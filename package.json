@@ -1,0 +1,19 @@
+{
+  "name": "tp-ckeditor",
+  "version": "1.0.0",
+  "description": "CKEditor build for TargetProcess",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TargetProcess/tp-ckeditor.git"
+  },
+  "author": "taucraft",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TargetProcess/tp-ckeditor/issues"
+  },
+  "homepage": "https://github.com/TargetProcess/tp-ckeditor#readme"
+}
