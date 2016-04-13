@@ -3,6 +3,7 @@ CKEDITOR.plugins.add('tauuploader',
     {
         init: function(editor) {
             var uploadFiles = editor.config.uploaderConfig.uploadFiles;
+            var onUploadError = editor.config.uploaderConfig.onUploadError || _.noop;
             var b64toBlob = function(b64Data, contentType, sliceSize) {
                 contentType = contentType || '';
                 sliceSize = sliceSize || 512;
@@ -46,7 +47,7 @@ CKEDITOR.plugins.add('tauuploader',
                         if (!data.files || data.files.length === 0) {
                             return;
                         }
-                        uploadFiles.upload(data).then(insertToEditor);
+                        uploadFiles.upload(data).then(insertToEditor, onUploadError);
                     },
                     url: editor.config.uploaderConfig.url,
                     formData: editor.config.uploaderConfig.formData,
@@ -70,7 +71,7 @@ CKEDITOR.plugins.add('tauuploader',
                         blob.name = new Date().toDateString();
                         uploadFiles.handleUploadResponse($editor.fileupload('send', {
                             files: [blob]
-                        })).then(insertToEditor);
+                        })).then(insertToEditor, onUploadError);
                     }
                 });
 
