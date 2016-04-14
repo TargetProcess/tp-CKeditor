@@ -54,6 +54,17 @@ CKEDITOR.plugins.add('tauuploader',
                     dropZone: $editor,
                     pasteZone: $editor
                 });
+                
+                editor.on('beforePaste', function(e) {
+                    var dt = e.data.dataTransfer.$;
+                    if(dt && dt.items){
+                        $.each(dt.items, function(i, val) {
+                            if(val.kind === 'file'){
+                                e.cancel();
+                            }
+                        });
+                    }
+                });
 
                 // Paste from clipboard workaround for Firefox.
                 editor.on('paste', function(e) {
@@ -74,7 +85,6 @@ CKEDITOR.plugins.add('tauuploader',
                         })).then(insertToEditor, onUploadError);
                     }
                 });
-
             });
         } //Init
     });
