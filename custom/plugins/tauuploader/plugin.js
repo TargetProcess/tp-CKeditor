@@ -55,14 +55,16 @@ CKEDITOR.plugins.add('tauuploader',
                     pasteZone: $editor
                 });
                 
-                editor.on('beforePaste', function(e) {
-                    var dt = e.data.dataTransfer.$;
-                    if(dt && dt.items){
-                        $.each(dt.items, function(i, val) {
-                            if(val.kind === 'file'){
-                                e.cancel();
-                            }
-                        });
+                editor.on('beforePaste', function (e) {
+                	if (e.data.dataTransfer){
+                        var dt = e.data.dataTransfer.$;
+                        if(dt && dt.items){
+                            $.each(dt.items, function(i, val) {
+                                if(val.kind === 'file'){
+                                    e.cancel();
+                                }
+                            });
+                        }
                     }
                 });
 
