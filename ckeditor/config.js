@@ -78,6 +78,7 @@ CKEDITOR.editorConfig = function (config) {
 CKEDITOR.plugins.addExternal('divarea', '../custom/plugins/divarea/');
 CKEDITOR.plugins.addExternal('font', '../custom/plugins/font/');
 CKEDITOR.plugins.addExternal('colorbutton', '../custom/plugins/colorbutton/');
+CKEDITOR.plugins.addExternal('justify', '../custom/plugins/justify/');
 CKEDITOR.plugins.addExternal('charcount', '../custom/plugins/charcount/');
 CKEDITOR.plugins.addExternal('sourceautogrow', '../custom/plugins/sourceautogrow/');
 CKEDITOR.plugins.addExternal('customize', '../custom/plugins/customize/');
