@@ -41,7 +41,7 @@ CKEDITOR.editorConfig = function (config) {
         }
     };
 
-    config.plugins = config.plugins + ',sourceautogrow,customize,image,tauuploader,mentions,divarea,font,colorbutton,justify,pastefromword,pastetext';
+    config.plugins = config.plugins + ',sourceautogrow,customize,image,tauuploader,mentions,divarea,font,colorbutton,justify,pastetools,pastefromword,pastetext';
 
     config.enterMode = CKEDITOR.ENTER_DIV;
     config.language = 'en';
@@ -58,7 +58,7 @@ CKEDITOR.editorConfig = function (config) {
     config.filebrowserUploadMethod = 'form';
 
     config.toolbar_Full = [
-        ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript'],
+        ['Cut', 'Copy', 'Paste', '-', 'Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript'],
         ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'],
         ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
         ['Link', 'Unlink', 'Anchor'],
