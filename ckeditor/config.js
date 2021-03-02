@@ -53,7 +53,7 @@ CKEDITOR.editorConfig = function (config) {
 
     config.templates_replaceContent = false;
 
-    config.removePlugins = 'autogrow,magicline';
+    config.removePlugins = 'autogrow,magicline,elementspath';
 
     config.toolbar_Full = [
         ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript'],
