@@ -41,7 +41,7 @@ CKEDITOR.editorConfig = function (config) {
         }
     };
 
-    config.plugins = config.plugins + ',sourceautogrow,customize,image,tauuploader,mentions,divarea,font,colorbutton,justify,pastetools,pastefromword,pastetext,tableresize';
+    config.plugins = config.plugins + ',sourceautogrow,customize,image,tauuploader,mentions,divarea,font,colorbutton,justify,pastetools,pastefromword,pastetext,tableresize,clipboard';
 
     config.enterMode = CKEDITOR.ENTER_DIV;
     config.language = 'en';
