@@ -88,3 +88,4 @@ CKEDITOR.plugins.addExternal('image', '../custom/plugins/image/');
 CKEDITOR.plugins.addExternal('tauuploader', '../custom/plugins/tauuploader/');
 CKEDITOR.plugins.addExternal('mentions', '../custom/plugins/mentions/');
 CKEDITOR.plugins.addExternal('tableresize', '../custom/plugins/tableresize/');
+CKEDITOR.plugins.addExternal('clipboard', '../custom/plugins/clipboard/');
