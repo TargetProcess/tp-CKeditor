@@ -41,7 +41,7 @@ CKEDITOR.editorConfig = function (config) {
         }
     };
 
-    config.plugins = config.plugins + ',sourceautogrow,customize,image,tauuploader,mentions,divarea,font,colorbutton,justify,pastetools,pastefromword,pastetext';
+    config.plugins = config.plugins + ',sourceautogrow,customize,image,tauuploader,mentions,divarea,font,colorbutton,justify,pastetools,pastefromword,pastetext,tableresize';
 
     config.enterMode = CKEDITOR.ENTER_DIV;
     config.language = 'en';
@@ -87,3 +87,4 @@ CKEDITOR.plugins.addExternal('customize', '../custom/plugins/customize/');
 CKEDITOR.plugins.addExternal('image', '../custom/plugins/image/');
 CKEDITOR.plugins.addExternal('tauuploader', '../custom/plugins/tauuploader/');
 CKEDITOR.plugins.addExternal('mentions', '../custom/plugins/mentions/');
+CKEDITOR.plugins.addExternal('tableresize', '../custom/plugins/tableresize/');
