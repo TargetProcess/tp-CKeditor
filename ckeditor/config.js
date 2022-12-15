@@ -89,3 +89,18 @@ CKEDITOR.plugins.addExternal('tauuploader', '../custom/plugins/tauuploader/');
 CKEDITOR.plugins.addExternal('mentions', '../custom/plugins/mentions/');
 CKEDITOR.plugins.addExternal('tableresize', '../custom/plugins/tableresize/');
 CKEDITOR.plugins.addExternal('clipboard', '../custom/plugins/clipboard/');
+
+// workaround for paste button
+// see https://github.com/ckeditor/ckeditor4/issues/469
+CKEDITOR.on("instanceReady", function(event) {
+    event.editor.on("beforeCommandExec", function(event) {
+        // Show the paste dialog for the paste buttons and right-click paste
+        if (event.data.name == "paste") {
+            event.editor._.forcePasteDialog = true;
+        }
+        // Don't show the paste dialog for Ctrl+Shift+V
+        if (event.data.name == "pastetext" && event.data.commandData.from == "keystrokeHandler") {
+            event.cancel();
+        }
+    })
+});

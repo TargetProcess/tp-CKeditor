@@ -1,10 +1,10 @@
 /*global CKEDITOR, $, _*/
 CKEDITOR.plugins.add('tauuploader',
     {
-        init: function(editor) {
+        init: function (editor) {
             var uploadFiles = editor.config.uploaderConfig.uploadFiles;
             var onUploadError = editor.config.uploaderConfig.onUploadError || _.noop;
-            var b64toBlob = function(b64Data, contentType, sliceSize) {
+            var b64toBlob = function (b64Data, contentType, sliceSize) {
                 contentType = contentType || '';
                 sliceSize = sliceSize || 512;
                 var byteCharacters = atob(b64Data);
@@ -24,7 +24,7 @@ CKEDITOR.plugins.add('tauuploader',
                 return new Blob(byteArrays, {type: contentType});
             };
 
-            var insertToEditor = function(file) {
+            var insertToEditor = function (file) {
                 var element;
                 if (uploadFiles.isImage(file)) {
                     element = CKEDITOR.dom.element
@@ -40,10 +40,10 @@ CKEDITOR.plugins.add('tauuploader',
                 allowedContent: 'img[!src,id];'
             });
 
-            editor.on('instanceReady', function() {
+            editor.on('instanceReady', function () {
                 var $editor = $(editor.editable().$);
                 $editor.addClass('i-role-uploader-area').fileupload({
-                    add: function(event, data) {
+                    add: function (event, data) {
                         if (!data.files || data.files.length === 0) {
                             return;
                         }
@@ -54,13 +54,13 @@ CKEDITOR.plugins.add('tauuploader',
                     dropZone: $editor,
                     pasteZone: $editor
                 });
-                
+
                 editor.on('beforePaste', function (e) {
                     if (e.data.dataTransfer) {
                         var dt = e.data.dataTransfer.$;
-                        if(dt && dt.items){
-                            $.each(dt.items, function(i, val) {
-                                if(val.kind === 'file') {
+                        if (dt && dt.items) {
+                            $.each(dt.items, function (i, val) {
+                                if (val.kind === 'file') {
                                     e.cancel();
                                 }
                             });
@@ -69,22 +69,43 @@ CKEDITOR.plugins.add('tauuploader',
                 });
 
                 // Paste from clipboard workaround for Firefox.
-                editor.on('paste', function(e) {
+                editor.on('paste', function (e) {
                     var data = e.data,
-                        html = (data.html || ( data.type && data.type == 'html' && data.dataValue));
+                        html = (data.html || (data.type && data.type == 'html' && data.dataValue));
 
                     if (!html || !_.isString(html)) {
                         return;
                     }
-                    var match = html.match(/<img src="data:image\/png;base64,(.*?)".*?>/);
-                    if (match && match[1]) {
-                        var imageData = match[1];
+                    var imageRegExp = /<img src="data:image\/(png|jpeg|gif);base64,(.*?)".*?>/;
+                    var styleRegExp = /style="(.*?)"/
+                    var allImagesRegExp = /<img src="data:image\/(png|jpeg|gif);base64,(.*?)".*?>/g;
+                    var matches = Array.from(html.matchAll(allImagesRegExp));
+                    if (matches.length) {
                         e.cancel();
-                        var blob = b64toBlob(imageData, 'image/png');
-                        blob.name = new Date().toDateString();
-                        uploadFiles.handleUploadResponse($editor.fileupload('send', {
-                            files: [blob]
-                        })).then(insertToEditor, onUploadError);
+                        editor.setReadOnly(true);
+
+                        Promise.all(matches.map((match) => {
+                            const imageData = match[2];
+                            const blob = b64toBlob(imageData, `image/${match[1]}`);
+                            blob.name = new Date().toDateString();
+                            return uploadFiles.handleUploadResponse($editor.fileupload('send', {
+                                files: [blob]
+                            }))
+                        })).then(responses => {
+                            let updatedHtml = html;
+
+                            responses.forEach(response => {
+                                const firstImageWithDataUrl = updatedHtml.match(imageRegExp);
+                                const style = firstImageWithDataUrl[0].match(styleRegExp)[1] || "";
+                                updatedHtml = updatedHtml.replace(imageRegExp, `<img src="${response.uri}" style="${style}">`);
+                            });
+
+                            editor.setReadOnly(false);
+                            editor.insertHtml(updatedHtml);
+                        }).catch(error => {
+                            editor.setReadOnly(false);
+                            onUploadError(error);
+                        })
                     }
                 });
             });
