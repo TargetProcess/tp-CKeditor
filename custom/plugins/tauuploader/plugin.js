@@ -76,32 +76,38 @@ CKEDITOR.plugins.add('tauuploader',
                     if (!html || !_.isString(html)) {
                         return;
                     }
-                    var imageRegExp = /<img src="data:image\/(png|jpeg|gif);base64,(.*?)".*?>/;
-                    var styleRegExp = /style="(.*?)"/
-                    var allImagesRegExp = /<img src="data:image\/(png|jpeg|gif);base64,(.*?)".*?>/g;
-                    var matches = Array.from(html.matchAll(allImagesRegExp));
-                    if (matches.length) {
+                    var container = document.createElement('div');
+                    container.innerHTML = html;
+
+                    var mimeTypeRegExp = /:(.*?);/;
+                    var imagesWithDataUrl = Array.from(container.querySelectorAll('img'))
+                        .filter(x => x.src && x.src.startsWith('data'));
+
+                    if (imagesWithDataUrl.length) {
                         e.cancel();
                         editor.setReadOnly(true);
 
-                        Promise.all(matches.map((match) => {
-                            const imageData = match[2];
-                            const blob = b64toBlob(imageData, `image/${match[1]}`);
+                        Promise.all(imagesWithDataUrl.map((image) => {
+                            const content = image.src.split(',')[1];
+                            const mimeType = image.src.match(mimeTypeRegExp)[1];
+                            const blob = b64toBlob(content, mimeType);
                             blob.name = new Date().toDateString();
+
                             return uploadFiles.handleUploadResponse($editor.fileupload('send', {
                                 files: [blob]
                             }))
                         })).then(responses => {
-                            let updatedHtml = html;
+                            imagesWithDataUrl.forEach((image, index) => {
+                                const img = document.createElement('img');
+                                img.src = responses[index].uri;
+                                img.style = image.style;
+                                img.alt = image.alt;
 
-                            responses.forEach(response => {
-                                const firstImageWithDataUrl = updatedHtml.match(imageRegExp);
-                                const style = firstImageWithDataUrl[0].match(styleRegExp)[1] || "";
-                                updatedHtml = updatedHtml.replace(imageRegExp, `<img src="${response.uri}" style="${style}">`);
+                                image.parentElement.replaceChild(img, image);
                             });
 
                             editor.setReadOnly(false);
-                            editor.insertHtml(updatedHtml);
+                            editor.insertHtml(container.innerHTML);
                         }).catch(error => {
                             editor.setReadOnly(false);
                             onUploadError(error);

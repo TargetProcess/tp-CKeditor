@@ -1,6 +1,6 @@
 {
   "name": "tp-ckeditor",
-  "version": "3.2.13-alpha.1",
+  "version": "3.2.13-alpha.2",
   "description": "CKEditor build for TargetProcess",
   "main": "index.js",
   "scripts": {
