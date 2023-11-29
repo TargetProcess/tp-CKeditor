@@ -51,6 +51,7 @@ CKEDITOR.plugins.add('tauuploader',
                     },
                     url: editor.config.uploaderConfig.url,
                     formData: editor.config.uploaderConfig.formData,
+                    singleFileUploads: editor.config.uploaderConfig.singleFileUploads,
                     dropZone: $editor,
                     pasteZone: $editor
                 });
